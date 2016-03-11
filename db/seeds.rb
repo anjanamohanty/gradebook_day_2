@@ -9,4 +9,6 @@
 t1 = Teacher.create!(name: "Mrs. Rollins", email: "rollins@mail.com", password: "rollinsisateacher")
 t2 = Teacher.create!(name: "Mr. Fidel", email: "fidel@mail.com", password: "fidelisateacher")
 
-s1 = Student.create!(name: "Ruti", email: "ruti@mail.com", teacher: t1)
+s1 = Student.create!(name: "Ruti", email: "ruti@mail.com", teacher: t1, password: "ruti")
+
+p1 = Parent.create!(name: "Geeta", email: "geeta@mail.com", student: s1, password: "geeta")
