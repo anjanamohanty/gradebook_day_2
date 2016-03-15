@@ -11,8 +11,9 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       session[:user_type] = params[:user_type]
 
-      redirect_to root_path, notice: "You have logged in!" if params[:user_type] == "Teacher"
-      redirect_to grades_path, notice: "You have logged in!" if params[:user_type] == "Student" || params[:user_type] == "Parent"
+      redirect_to root_path, notice: "You have logged in!" if session[:user_type] == "Teacher"
+      redirect_to student_path id: session[:user_id] if session[:user_type] == "Student"
+      redirect_to parent_path id: session[:user_id] if session[:user_type] == "Parent"
     else
       flash.now[:alert] = "Invalid email or password"
       render "new"

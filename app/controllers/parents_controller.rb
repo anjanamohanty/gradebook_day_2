@@ -1,6 +1,7 @@
 class ParentsController < ApplicationController
   before_action :set_parent, only: [:show, :edit, :update, :destroy]
   before_action :logged_in?
+  before_action :logged_in_as_teacher?, except: [:show]
 
   # GET /parents
   def index
@@ -50,6 +51,10 @@ class ParentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_parent
       @parent = Parent.find(params[:id])
+
+      unless session[:user_type] == "Parent" && @parent.id == session[:user_id]
+        redirect_to :back
+      end
     end
 
     # Only allow a trusted parameter "white list" through.

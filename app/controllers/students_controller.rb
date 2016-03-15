@@ -10,6 +10,7 @@ class StudentsController < ApplicationController
 
   # GET /students/1
   def show
+    @grades = Grade.where(student_id: @student.id)
   end
 
   # GET /students/new
