@@ -1,7 +1,7 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy]
   before_action :logged_in?
-  before_action :logged_in_as_teacher?
+  before_action :logged_in_as_teacher?, except: [:show]
 
   # GET /students
   def index
@@ -51,7 +51,8 @@ class StudentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_student
       @student = Student.find(params[:id])
-      unless @student.teacher_id == session[:user_id]
+
+      unless (session[:user_type] == "Teacher" && @student.teacher_id == session[:user_id]) || (session[:user_type] == "Student" && @student.id == session[:user_id])
         redirect_to :back
       end
     end

@@ -5,14 +5,16 @@ class SessionsController < ApplicationController
   end
 
   def create
-    teacher = Teacher.find_by_email(params[:email])
-    if teacher && teacher.authenticate(params[:password])
-      session[:user_id] = teacher.id
-      session[:user_type] = "Teacher"
+    user = (params[:user_type]).constantize.find_by_email(params[:email])
 
-      redirect_to root_path, notice: "You have succesfully logged in!"
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      session[:user_type] = params[:user_type]
+
+      redirect_to root_path, notice: "You have logged in!" if params[:user_type] == "Teacher"
+      redirect_to grades_path, notice: "You have logged in!" if params[:user_type] == "Student" || params[:user_type] == "Parent"
     else
-      flash.now[:alert] = "Login failed: invalid email or password."
+      flash.now[:alert] = "Invalid email or password"
       render "new"
     end
   end

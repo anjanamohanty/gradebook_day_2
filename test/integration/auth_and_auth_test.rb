@@ -32,7 +32,7 @@ class AuthAndAuthTest < ActionDispatch::IntegrationTest
 
     get root_path
     follow_redirect!
-    post login_path, email: "mason@example.com", password: "password"
+    post login_path, email: "mason@example.com", password: "password", user_type: "Teacher"
     follow_redirect!
 
     # Create teachers
@@ -40,7 +40,7 @@ class AuthAndAuthTest < ActionDispatch::IntegrationTest
     assert_template "index"
     get new_teacher_path
     assert_template "new"
-    post teachers_path, teacher: {name: "Anjana Mohanty", email: "anjana@gmail.com", password: "abc1234"}
+    post teachers_path teacher: {name: "Anjana Mohanty", email: "anjana@gmail.com", password: "abc1234"}
     follow_redirect!
     assert_template "show"
     assert response.body.include?("Anjana Mohanty")
@@ -50,7 +50,7 @@ class AuthAndAuthTest < ActionDispatch::IntegrationTest
     assert_template "index"
     get new_student_path
     assert_template "new"
-    post students_path, student: {name: "Anjana Mohanty", email: "anjana@gmail.com", password: "abc1234", teacher_id: teachers(:one).id}
+    post students_path student: {name: "Anjana Mohanty", email: "anjana@gmail.com", password: "abc1234", teacher_id: teachers(:one).id}
     follow_redirect!
     assert_template "show"
     assert response.body.include?("Anjana Mohanty")
@@ -60,7 +60,7 @@ class AuthAndAuthTest < ActionDispatch::IntegrationTest
     assert_template "index"
     get new_parent_path
     assert_template "new"
-    post parents_path, parent: {name: "Anjana Mohanty", email: "anjana@gmail.com", password: "abc1234", student_id: students(:one).id}
+    post parents_path parent: {name: "Anjana Mohanty", email: "anjana@gmail.com", password: "abc1234", student_id: students(:one).id}
     follow_redirect!
     assert_template "show"
     assert response.body.include?("Anjana Mohanty")
@@ -72,7 +72,7 @@ class AuthAndAuthTest < ActionDispatch::IntegrationTest
     assert_template "index"
     get new_grade_path
     assert_template "new"
-    post grades_path, grade: {assignment_name: "Homework 1", grade: 4, student_id: students(:one).id}
+    post grades_path grade: {assignment_name: "Homework 1", grade: 4, student_id: students(:one).id}
     follow_redirect!
     assert_template "show"
 
@@ -92,13 +92,17 @@ class AuthAndAuthTest < ActionDispatch::IntegrationTest
 
   # Students who have logged in should be able to:
   test "students who have logged in should be able to do these things" do
-    
-    get root_path
-    follow_redirect!
-    post login_path, email: "mason@example.com", password: "password"
+
+    get grades_path
+    assert_redirected_to login_path
     follow_redirect!
 
+    post login_path email: "anjana@mail.com", password: "password", user_type: "Student"
+
     # See their grades.
+    get student_path id: students(:anjana).id
+    assert_template "show"
+
   end
 
   # Students who have logged in should NOT be able to:

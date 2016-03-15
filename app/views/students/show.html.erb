@@ -12,7 +12,7 @@
 
 <p>
   <strong>Teacher:</strong>
-  <%= @student.teacher.name %>
+  <%= @student.teacher.name if @student.teacher %>
 </p>
 
 <%= link_to 'Edit', edit_student_path(@student) %> |

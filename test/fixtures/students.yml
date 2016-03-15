@@ -11,3 +11,9 @@ two:
   email: MyString
   password_digest: MyString
   teacher_id: 1
+
+anjana:
+  name: "Anjana Mohanty"
+  email: "anjana@mail.com"
+  password_digest: <%= BCrypt::Password.create("password") %>
+  teacher_id: 1

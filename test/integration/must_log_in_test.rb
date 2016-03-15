@@ -11,7 +11,7 @@ class MustLogInTest < ActionDispatch::IntegrationTest
     assert_select "input[type=password]", 1
 
     #Log in
-    post login_path email: "mason@example.com", password: "password"
+    post login_path email: "mason@example.com", password: "password", user_type: "Teacher"
     assert_redirected_to root_path
     follow_redirect!
 
